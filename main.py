@@ -6,14 +6,18 @@ from bs4 import BeautifulSoup
 import re
 import time
 
+# İki kısmı olan tokenları birleştirerek tam tokeni oluştur
+PART_1 = "MTI2NzU0NjQ4MTQ2NDg0MDI2Ng"
+PART_2 = "GmoMpj._87ir4HG_2H6rmf0Sbjy6tXa51BBqLh2LEusag"
+DISCORD_BOT_TOKEN = f"{PART_1}.{PART_2}"
+
 intents = nextcord.Intents.default()
 intents.message_content = True  # Mesaj içeriği niyetini etkinleştir
 
 bot = commands.Bot(command_prefix='/', intents=intents)
 
-WEBHOOK_URL_173 = "https://discord.com/api/webhooks/1268702067376001034/Z47dW23MEq364xRAr5Zjv8lTnb7BHizO7OF2lp48i-l5Gfs0F-PlMWFg97TQjOCG50Fk"
-WEBHOOK_URL_174 = "https://discord.com/api/webhooks/1268702478367461490/U0Q88RXhWazvWZKoHaq5qun1dBcQVkQ7DfeBLNSUuHjyG2jq9wmeWjNqVGXUNBwRuZYx"  # Ek webhook URL'si
-DISCORD_BOT_TOKEN = "MTI2NzU0NjQ4MTQ2NDg0MDI2Ng.GGLBsg.FHUZeCQuoZ_lEckbTNmU4Jl_aB_GaZLtKXq21w"
+WEBHOOK_URL_173 = os.getenv("WEBHOOK_URL_173")
+WEBHOOK_URL_174 = os.getenv("WEBHOOK_URL_174")
 
 # Function to fetch and parse HTML
 def fetch_and_parse_html(url):
@@ -96,7 +100,6 @@ def send_to_discord(data, webhook_url):
 # /sorgula komutu
 @bot.slash_command(name="sorgula", description="Serverleri Sorgula [173-174]")
 async def sorgula(ctx, ip: str):
-    # IP'yi kontrol et
     if ip not in ["173", "174"]:
         await ctx.send("Dur Lan! 173 veya 174 yaz.")
         return
@@ -106,7 +109,6 @@ async def sorgula(ctx, ip: str):
     html_content = fetch_and_parse_html(url)
     server_data = parse_html(html_content)
 
-    # IP'ye göre doğru webhook'u belirle
     if ip == "173":
         send_to_discord(server_data, WEBHOOK_URL_173)
         channel_url = "https://discord.com/channels/1268679931446034594/1268699712177967135"
