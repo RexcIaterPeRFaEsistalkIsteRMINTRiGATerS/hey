@@ -16,10 +16,9 @@ intents.message_content = True  # Mesaj içeriği niyetini etkinleştir
 
 bot = commands.Bot(command_prefix='/', intents=intents)
 
-WEBHOOK_URL_173 = os.getenv("WEBHOOK_URL_173")
-WEBHOOK_URL_174 = os.getenv("WEBHOOK_URL_174")
+WEBHOOK_URL_173 = "https://discord.com/api/webhooks/1268702067376001034/Z47dW23MEq364xRAr5Zjv8lTnb7BHizO7OF2lp48i-l5Gfs0F-PlMWFg97TQjOCG50Fk"
+WEBHOOK_URL_174 = "https://discord.com/api/webhooks/1268702478367461490/U0Q88RXhWazvWZKoHaq5qun1dBcQVkQ7DfeBLNSUuHjyG2jq9wmeWjNqVGXUNBwRuZYx"
 
-# Function to fetch and parse HTML
 def fetch_and_parse_html(url):
     try:
         response = requests.get(url)
@@ -56,7 +55,6 @@ def parse_html(html_content):
             })
     return server_data
 
-# Function to send data to Discord webhook
 def send_to_discord(data, webhook_url):
     def chunk_data(data, chunk_size):
         for i in range(0, len(data), chunk_size):
@@ -104,7 +102,7 @@ async def sorgula(ctx, ip: str):
         await ctx.send("Dur Lan! 173 veya 174 yaz.")
         return
 
-    await ctx.send(f"{ip} dekileri...")
+    await ctx.send(f"{ip} dekileri sorguluyorum...")
     url = f"https://www.oyunyoneticisi.com/server/cs16ipler_{ip}.txt"
     html_content = fetch_and_parse_html(url)
     server_data = parse_html(html_content)
@@ -116,7 +114,7 @@ async def sorgula(ctx, ip: str):
         send_to_discord(server_data, WEBHOOK_URL_174)  # Ek webhook
         channel_url = "https://discord.com/channels/1268679931446034594/1268699729349578783"
 
-    await ctx.send(f"Sunucu bilgileri gönderildi {channel_url}.")
+    await ctx.send(f"Sunucu bilgileri gönderildi bak lan şuraya > {channel_url}.")
 
 # /top15time komutu
 @bot.slash_command(name="top15time", description="Top 15 zaman bilgilerini getir.")
@@ -125,5 +123,4 @@ async def top15time(ctx, ip: str):
     # Bu komut için özel script'i buraya ekleyin
     await ctx.send("Top 15 zaman bilgileri gönderildi.")
 
-# Botun tokeni ile botu çalıştır
 bot.run(DISCORD_BOT_TOKEN)
